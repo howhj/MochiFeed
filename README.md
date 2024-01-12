@@ -8,15 +8,15 @@ This is still a work in progress, but the basic functionality of subscribing, un
 
 Well, there are a few reasons.
 
-Maybe you don't want to get distracted by recommendations.
-Maybe you are sick of being forced to deal with ugly UI changes.
-Maybe you don't want to see toxic comments.
+* Maybe you don't want to get distracted by recommendations.
+* Maybe you are sick of being forced to deal with ugly UI changes.
+* Maybe you don't want to see toxic comments.
 
-At least for me, these are just a few of the reasons why I've had it with the platform and want to follow my favourite creators in a different way.
+At least for me, these are just a few of the reasons why I'm fed up with the platform and want to follow my favourite creators in a different way.
 
 ## Requirements
 
-Only Linux is supported, but since MochiFeed runs on Bash scripts, it may be possible to use it on MacOS or even Windows via WSL.
+Only Linux is supported, but since MochiFeed runs on Bash scripts, it may be possible to use it on MacOS or even Windows via WSL. No guarantees though.
 
 [yt-dlp](https://github.com/yt-dlp/yt-dlp) is required to download videos.
 
@@ -52,6 +52,7 @@ You will be prompted to choose which videos you want to download. Video download
 * Scrape channel page instead of RSS feed to extract video duration
 * Store data in SQLite instead of text files
 * Store channel tags/names and have a function to list out all channels subscribed to
+* Proper method to store concurrent curl output, instead of creating a temporary file per channel
 
 ### Medium Priority
 
