@@ -21,13 +21,12 @@ echo "Syncing feed..."
 threads=10
 total=$(wc -l < "$rss_file")
 iter=$(((total + threads - 1) / threads))
-feeds=($(seq 1 $total))
 index=-1
 line=0
 
 # TODO scrape channel page instead of RSS feed for video duration
 for i in $(seq 1 $iter); do
-    for j in $(seq 1 $threads); do
+    for _ in $(seq 1 $threads); do
         index=$((index + 1))
         line=$((line + 1))
         url=$(sed "${line}q;d" "$rss_file")
@@ -35,7 +34,7 @@ for i in $(seq 1 $iter); do
             break
         fi
         # TODO use single line progress counter
-        echo "Syncing $line"
+        #echo "Syncing $line"
         url=$(sed "${line}q;d" "$rss_file")
 
         # Save output to a file to enable concurrency
@@ -45,7 +44,7 @@ for i in $(seq 1 $iter); do
     wait
 done
 
-echo "Sync done. Checking which videos are new."
+echo 'Sync done. Checking which videos are new.'
 
 # Use 2 arrays, one for video ID and one for video title
 declare -a ids
@@ -54,7 +53,7 @@ ctr=0
 total=$(wc -l < "$working_file")
 
 # Query for the RSS feed and parse response for the video URLs
-for file in "${feeds[@]}"; do
+for file in $(seq 1 "$total"); do
     #regex=$(awk '/<yt:videoId>/,/<[/]title>/' <<< "${xml}")
     xml=$(cat "$file")
     rm "$file"
@@ -64,10 +63,10 @@ for file in "${feeds[@]}"; do
     ctr=$((ctr+1))
 
     # TODO use channel name, single line
-    echo "Checking $ctr"
+    #echo "Checking $ctr"
 
     # Determine which video is new and grab the ID of new videos
-    while IFS= read -a id; do
+    while IFS= read id; do
         # Strip grep output for the exact video ID
         id=${id#*"<yt:videoId>"}
         id=${id%"</yt:videoId>"}
@@ -106,7 +105,7 @@ for file in "${feeds[@]}"; do
     # For each new video, grab the title as well
     first=true
     channel=""
-    while IFS= read -a title; do
+    while IFS= read -r title; do
         # Strip grep output for the exact title
         title=${title#*"<title>"}
         title=${title%"</title>"}
@@ -127,11 +126,11 @@ for file in "${feeds[@]}"; do
             break
         fi
     done < <(grep "<title>" <<< "$xml")
-done #< <(cat $rss_file)
+done
 
 # Exit if no new videos found
 if [ ${#ids[@]} = 0 ]; then
-    echo "No new videos found. Exiting."
+    echo 'No new videos found.'
     rm "$working_file"
     exit 0
 fi
@@ -149,12 +148,12 @@ done
 # TODO loop through 2 menus, first one for options:
 # download video, download audio, watch now, bookmark, custom, exit
 # second one to select videos
-read -a input -p "Select videos to download: (e.g. \"1 2 3\") "
+read -a input -p 'Select videos to download: (e.g. "1 2 3") '
 #read -a queue -p "Select videos to download: (e.g. \"1 2 3\", \"1-3\" or \"^4\")"
 
 # Exit if no videos selected for download
 if [ ${#input[@]} = 0 ]; then
-    echo "No videos selected. Exiting."
+    echo 'No videos selected. Exiting.'
     exit 0
 fi
 
@@ -172,21 +171,20 @@ echo "${queue[@]}" > "$queue_file"
 
 # Use yt-dlp to download each selected video
 for i in "${!queue[@]}"; do
-    yt-dlp "https://www.youtube.com/watch?v=${queue[$i]}"
-
-    # After a video is downloaded, remove it from the download queue
-    if [ $? == 0 ]; then
+    if yt-dlp "https://www.youtube.com/watch?v=${queue[$i]}"; then
+        # After a video is downloaded, remove it from the download queue
         unset "queue[$i]"
         echo "${queue[@]}" > "$queue_file"
     fi
 done
 
 # Exit
-if [[ -z $(grep '[^[:space:]]' "$queue_file") ]]; then
-    echo "All selected videos downloaded successfully!"
+#if [[ -z $(grep '[^[:space:]]' "$queue_file") ]]; then
+if ! grep -q '[^[:space:]]' "$queue_file"; then
+    echo 'All selected videos downloaded successfully!'
     rm "$queue_file"
     exit 0
 else
-    echo "Failed to download some videos. Please use (...) to retry."
+    echo 'Failed to download some videos. Please use "./main.sh -r" to retry.'
     exit 3
 fi

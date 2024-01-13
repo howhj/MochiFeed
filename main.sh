@@ -11,13 +11,14 @@ get_channel_id () {
 
     # Get response from Youtube
     local url="https://www.youtube.com/${1}/videos"
-    local response=$(curl -s -i "$url")
+    local response
+    response=$(curl -s -i "$url")
 
     # Check response status
-    local status=$(grep "HTTP/2" <<< "$response")
-    local status=${status#*'HTTP/2 '}
-    local status=${status%' '*}
-    echo "$status" > "curl.txt"
+    local status
+    status=$(grep "HTTP/2" <<< "$response")
+    status=${status#*'HTTP/2 '}
+    status=${status%' '*}
     if [ ! "$status" = 200 ]; then
         echo "Could not find channel for ${1}."
         return 2
@@ -32,13 +33,13 @@ get_channel_id () {
 # TODO update channels file
 subscribe () {
     for tag in "$@"; do
-        get_channel_id "$tag"
-        if [ $? != 0 ]; then
+        if ! get_channel_id "$tag"; then
             continue
         fi
 
         # Check if channel has already been added, and exit if so
-        local check=$(grep "$id" "$rss_file")
+        local check
+        check=$(grep "$id" "$rss_file")
         if [ "$check" != "" ]; then
             echo "Already subscribed to ${tag}."
             continue
@@ -53,21 +54,22 @@ subscribe () {
 # TODO switch to yay menu
 unsubscribe () {
     for tag in "$@"; do
-        get_channel_id "$tag"
-        if [ $? != 0 ]; then
+        if ! get_channel_id "$tag"; then
             continue
         fi
 
-        # Search for RSS feed in RSS file
-        local i=$(grep -Fn "$id" "$rss_file")
-        if [ "$i" = "" ]; then
+        # Search for RSS feed in RSS file and get line number if found
+        local line
+        line=$(grep -Fn "$id" "$rss_file")
+        if [ "$line" = "" ]; then
             echo "Not subscribed to ${tag}."
             continue
         fi
+        line="${line%":https://www.youtube.com/feeds/videos.xml?channel_id="*}"
 
         # Remove RSS feed from RSS file
-        local i="${i%":https://www.youtube.com/feeds/videos.xml?channel_id="*}"
-        local updated_list=$(sed "${i}d" "$rss_file")
+        local updated_list
+        updated_list=$(sed "${line}d" "$rss_file")
         echo "$updated_list" > "$rss_file"
         echo "Successfully unsubscribed from ${tag}!"
     done
@@ -91,8 +93,8 @@ error () {
 
 case $1 in
     -s) ./sync.sh ;;
-    -a) subscribe ${@:2} ;;
-    -d) unsubscribe ${@:2} ;;
+    -a) subscribe "${@:2}" ;;
+    -d) unsubscribe "${@:2}" ;;
     -r) retry_downloads ;;
     -c) list_channels ;;
     -h) print_usage ;;
