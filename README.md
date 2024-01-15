@@ -48,11 +48,10 @@ You will be prompted to choose which videos you want to download. Video download
 
 ### High Priority
 
+* Fix a regression bug where newly added channels are not checked properly during the sync process
 * A function to print out the usage guide
 * Scrape channel page instead of RSS feed to extract video duration
-* Store data in SQLite instead of text files
 * Store channel tags/names and have a function to list out all channels subscribed to
-* Proper method to store concurrent curl output, instead of creating a temporary file per channel
 
 ### Medium Priority
 
@@ -61,9 +60,11 @@ You will be prompted to choose which videos you want to download. Video download
     * Stream to watch a video immediately
     * Download audio only
     * Download with custom settings (by passing yt-dlp flags)
-* A function to retry downloads that failed
-* Use selection menu for unsubscribing, similar to the one for downloading videos
 * Store the list of new videos, so that it can be reopened later between feed updates
+* Store data in SQLite instead of text files
+* Proper method to store concurrent curl output, instead of creating a temporary file per channel
+* Use selection menu for unsubscribing, similar to the one for downloading videos
+* A function to retry downloads that failed
 
 ### Low Priority
 * Prettify output (e.g. progress counter, colours, formatting)
