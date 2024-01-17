@@ -51,7 +51,7 @@ echo 'Sync done. Checking which videos are new.'
 declare -a ids
 declare -a titles
 ctr=0
-total=$(wc -l < "$rss_file")
+mem_total=$(wc -l < "$working_file")
 
 # Query for the RSS feed and parse response for the video URLs
 for file in $(seq 1 "$total"); do
@@ -61,9 +61,9 @@ for file in $(seq 1 "$total"); do
     first=true
     count=0
     last_seen=""
-    ctr=$((ctr+1))
+    ctr=$((ctr + 1))
 
-    # TODO use channel name, single line
+    # TODO use channel name, printf
     #echo "Checking $ctr"
 
     # Determine which video is new and grab the ID of new videos
@@ -77,8 +77,7 @@ for file in $(seq 1 "$total"); do
             first=false
 
             # If channel has never been seen before, add to memory
-            # TODO not working anymore
-            if [ "$ctr" -gt "$total" ]; then
+            if [ "$ctr" -gt "$mem_total" ]; then
                 echo "$id" >> "$working_file"
             else
                 # If newest video has not been seen, update memory
