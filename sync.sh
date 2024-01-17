@@ -1,8 +1,9 @@
 #!/bin/bash
 
-rss_file="subscriptions.txt"
-memory_file="latest_vids.txt"
-working_file="$memory_file.new"
+readonly rss_file="subscriptions.txt"
+readonly memory_file="latest_vids.txt"
+readonly working_file="$memory_file.new"
+readonly last_sync_file="last_sync.txt"
 
 # Delete temp file if it exists
 if test -f "$working_file"; then
@@ -50,7 +51,7 @@ echo 'Sync done. Checking which videos are new.'
 declare -a ids
 declare -a titles
 ctr=0
-total=$(wc -l < "$working_file")
+total=$(wc -l < "$rss_file")
 
 # Query for the RSS feed and parse response for the video URLs
 for file in $(seq 1 "$total"); do
@@ -76,6 +77,7 @@ for file in $(seq 1 "$total"); do
             first=false
 
             # If channel has never been seen before, add to memory
+            # TODO not working anymore
             if [ "$ctr" -gt "$total" ]; then
                 echo "$id" >> "$working_file"
             else
@@ -138,6 +140,12 @@ fi
 # Overwrite old latest_vids.txt with new one
 mv "$working_file" "$memory_file"
 
+# Save the current video list
+echo "${ids[@]}" > "$last_sync_file"
+echo "${titles[@]}" >> "$last_sync_file"
+
+# TODO move below code into its own function/file
+
 # Print each video with index
 # TODO prettify
 for i in "${!ids[@]}"; do
@@ -179,7 +187,6 @@ for i in "${!queue[@]}"; do
 done
 
 # Exit
-#if [[ -z $(grep '[^[:space:]]' "$queue_file") ]]; then
 if ! grep -q '[^[:space:]]' "$queue_file"; then
     echo 'All selected videos downloaded successfully!'
     rm "$queue_file"
