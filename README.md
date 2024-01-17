@@ -53,26 +53,28 @@ You will be prompted to choose which videos you want to download. Video download
 ## Planned Features
 
 ### High Priority
-
 * A function to print out the usage guide
 * Scrape channel page instead of RSS feed to extract video duration
-* Store channel tags/names and have a function to list out all channels subscribed to
+* Store channel tags and have a function to list out all channels subscribed to
+* Store full YouTube video links in queue file, so that it can be passed to yt-dlp should any error occur without going through MochiFeed
 
 ### Medium Priority
-
 * Add more options to what the user can do after syncing
     * Bookmark videos for later
     * Stream to watch a video immediately
     * Download audio only
     * Download with custom settings (by passing yt-dlp flags)
 * Store the list of new videos, so that it can be reopened later between feed updates
-* Store data in SQLite instead of text files
-* Proper method to store concurrent curl output, instead of creating a temporary file per channel
-* Use selection menu for unsubscribing, similar to the one for downloading videos
 * A function to retry downloads that failed
+* Make it possible to pass a file containing a list of channel tags to the subscribe function
 
 ### Low Priority
 * Prettify output (e.g. progress counter, colours, formatting)
+* Use selection menu for unsubscribing, similar to the one for downloading videos
 * Enable other ways to make selection, following yay (e.g. 1-3, ^4)
+
+### Code Optimisations
+* Store data in SQLite instead of text files
+* Proper method to store concurrent curl output, instead of creating a temporary file per channel
 
 *Bunnies are preparing, please wait warmly~*
