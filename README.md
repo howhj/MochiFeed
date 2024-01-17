@@ -24,7 +24,9 @@ Only Linux is supported, but since MochiFeed runs on Bash scripts, it may be pos
 
 ### Subscribe to Channels
 
-`./main.sh -a [@channel ...]`
+`./main --sub [@channel ...]`
+
+`./main -s [@channel ...]`
 
 MochiFeed finds channels based on the tags you supply (which are the ones starting with "@").
 
@@ -32,11 +34,15 @@ You can subscribe to multiple channels at once by supplying multiple tags.
 
 ### Unsubscribe from Channels
 
-`./main.sh -d [@channel ...]`
+`./main --unsub [@channel ...]`
+
+`./main -u [@channel ...]`
 
 ### Sync Subscription Feed
 
-`./main.sh -s`
+`./main --fetch`
+
+`./main -f`
 
 As no daemons are used, the subscription feed will not update automatically. This command has to be run manually to update the feed.
 
@@ -48,7 +54,6 @@ You will be prompted to choose which videos you want to download. Video download
 
 ### High Priority
 
-* Fix a regression bug where newly added channels are not checked properly during the sync process
 * A function to print out the usage guide
 * Scrape channel page instead of RSS feed to extract video duration
 * Store channel tags/names and have a function to list out all channels subscribed to
