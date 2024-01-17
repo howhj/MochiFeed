@@ -53,7 +53,6 @@ You will be prompted to choose which videos you want to download. Video download
 ## Planned Features
 
 ### High Priority
-* Fix a bug where working file is not saving to memory file properly.
 * A function to print out the usage guide
 * Scrape channel page instead of RSS feed to extract video duration
 * Store channel tags and have a function to list out all channels subscribed to
