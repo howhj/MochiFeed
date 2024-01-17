@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # TODO migrate data storage to SQLite
-rss_file="subscriptions.txt"
+readonly rss_file="subscriptions.txt"
+readonly channel_file="channels.txt"
 
 get_channel_id () {
     if [[ "$1" != @* ]]; then
@@ -47,6 +48,7 @@ subscribe () {
 
         # Append RSS feed link to RSS feed file
         echo "https://www.youtube.com/feeds/videos.xml?channel_id=${id}" >> "$rss_file"
+        echo "$tag" >> "$channel_file"
         echo "Successfully subscribed to ${tag}!"
     done
 }
@@ -83,6 +85,10 @@ list_channels () {
     echo "To be implemented"
 }
 
+list_videos () {
+    echo "To be implemented"
+}
+
 print_usage () {
     echo "To be implemented"
 }
@@ -92,12 +98,20 @@ error () {
 }
 
 case $1 in
-    -s) ./sync.sh ;;
-    -a) subscribe "${@:2}" ;;
-    -d) unsubscribe "${@:2}" ;;
+    -f) ./sync.sh ;;
+    --fetch) ./sync.sh ;;
+    -s) subscribe "${@:2}" ;;
+    --sub) subscribe "${@:2}" ;;
+    -u) unsubscribe "${@:2}" ;;
+    --unsub) unsubscribe "${@:2}" ;;
     -r) retry_downloads ;;
+    --retry) retry_downloads ;;
     -c) list_channels ;;
+    --channels) list_channels ;;
+    -l) list_videos ;;
+    --latest) list_videos ;;
     -h) print_usage ;;
+    --help) print_usage ;;
     *) error ;;
 esac
 
