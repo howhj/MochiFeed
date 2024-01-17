@@ -169,8 +169,8 @@ declare -a queue
 
 # Make a queue with the IDs of the selected videos
 for i in "${input[@]}"; do
-    id="${ids[$i]}"
-    queue+=("$id")
+    link="https://www.youtube.com/watch?v=${ids[$i]}"
+    queue+=("$link")
 done
 
 # Save the download queue into a text file
@@ -178,7 +178,7 @@ echo "${queue[@]}" > "$queue_file"
 
 # Use yt-dlp to download each selected video
 for i in "${!queue[@]}"; do
-    if yt-dlp "https://www.youtube.com/watch?v=${queue[$i]}"; then
+    if yt-dlp "${queue[$i]}"; then
         # After a video is downloaded, remove it from the download queue
         unset "queue[$i]"
         echo "${queue[@]}" > "$queue_file"

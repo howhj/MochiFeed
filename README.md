@@ -56,7 +56,6 @@ You will be prompted to choose which videos you want to download. Video download
 * A function to print out the usage guide
 * Scrape channel page instead of RSS feed to extract video duration
 * Store channel tags and have a function to list out all channels subscribed to
-* Store full YouTube video links in queue file, so that it can be passed to yt-dlp should any error occur without going through MochiFeed
 
 ### Medium Priority
 * Add more options to what the user can do after syncing
