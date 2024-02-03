@@ -1,9 +1,9 @@
 #!/bin/bash
 
-readonly rss_file="subscriptions.txt"
-readonly memory_file="latest_vids.txt"
+readonly rss_file='subscriptions.txt'
+readonly memory_file='latest_vids.txt'
 readonly working_file="$memory_file.new"
-readonly last_sync_file="last_sync.txt"
+readonly last_sync_file='last_sync.txt'
 
 # Delete temp file if it exists
 if test -f "$working_file"; then
@@ -18,7 +18,7 @@ else
 fi
 
 # Fetch RSS feeds in parallel
-echo "Syncing feed..."
+echo 'Syncing feed...'
 threads=10
 total=$(wc -l < "$rss_file")
 iter=$(((total + threads - 1) / threads))
@@ -148,7 +148,8 @@ echo "${titles[@]}" >> "$last_sync_file"
 # Print each video with index
 # TODO prettify
 for i in "${!ids[@]}"; do
-    echo "$i" "${titles[$i]}"
+    duration="$(yt-dlp -O duration_string "https://www.youtube.com/watch?v=${ids[i]}")"
+    echo "$i $duration ${titles[$i]}"
 done
 
 # Ask for user input to select the videos to download
@@ -191,6 +192,6 @@ if ! grep -q '[^[:space:]]' "$queue_file"; then
     rm "$queue_file"
     exit 0
 else
-    echo 'Failed to download some videos. Please use "./main.sh -r" to retry.'
+    echo 'Failed to download some videos. Please use "./main -r" to retry.'
     exit 3
 fi

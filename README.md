@@ -53,8 +53,10 @@ You will be prompted to choose which videos you want to download. Video download
 ## Planned Features
 
 ### High Priority
+* Make video duration checks concurrent
+* Ignore videos with a length of NA, as they have been deleted
+* Ignore premieres and scheduled live streams
 * A function to print out the usage guide
-* Scrape channel page instead of RSS feed to extract video duration
 * Store channel tags and have a function to list out all channels subscribed to
 
 ### Medium Priority
@@ -75,5 +77,6 @@ You will be prompted to choose which videos you want to download. Video download
 ### Code Optimisations
 * Store data in SQLite instead of text files
 * Proper method to store concurrent curl output, instead of creating a temporary file per channel
+* Scrape channel page instead of RSS feed to extract video duration more efficiently
 
 *Bunnies are preparing, please wait warmly~*

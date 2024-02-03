@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # TODO migrate data storage to SQLite
-readonly rss_file="subscriptions.txt"
-readonly channel_file="channels.txt"
+readonly rss_file='subscriptions.txt'
+readonly channel_file='channels.txt'
 
 get_channel_id () {
     if [[ "$1" != @* ]]; then
@@ -17,7 +17,7 @@ get_channel_id () {
 
     # Check response status
     local status
-    status=$(grep "HTTP/2" <<< "$response")
+    status=$(grep 'HTTP/2' <<< "$response")
     status=${status#*'HTTP/2 '}
     status=${status%' '*}
     if [ ! "$status" = 200 ]; then
@@ -67,7 +67,7 @@ unsubscribe () {
             echo "Not subscribed to ${tag}."
             continue
         fi
-        line="${line%":https://www.youtube.com/feeds/videos.xml?channel_id="*}"
+        line="${line%':https://www.youtube.com/feeds/videos.xml?channel_id='*}"
 
         # Remove RSS feed from RSS file
         local updated_list
@@ -78,23 +78,23 @@ unsubscribe () {
 }
 
 retry_downloads () {
-    echo "To be implemented"
+    echo 'To be implemented'
 }
 
 list_channels () {
-    echo "To be implemented"
+    echo 'To be implemented'
 }
 
 list_videos () {
-    echo "To be implemented"
+    echo 'To be implemented'
 }
 
 print_usage () {
-    echo "To be implemented"
+    echo 'To be implemented'
 }
 
 error () {
-    echo "To be implemented"
+    echo 'To be implemented'
 }
 
 case $1 in
